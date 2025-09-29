@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - GuateRiegos 2.0{% endblock %}
+
+{% block content %}
+<h2>Invernaderos Cargados</h2>
+
+{% if invernaderos.tamano == 0 %}
+    <p>No hay invernaderos cargados. Por favor, sube un archivo de configuración XML.</p>
+{% else %}
+    <ul class="invernaderos-list">
+    {% for invernadero in invernaderos %}
+        {% set inv_idx = loop.index0 %}  <!-- Guardamos el índice del invernadero -->
+        <li>
+            <strong>{{ invernadero.nombre }}</strong>
+            ({{ invernadero.numero_hileras }} hileras, {{ invernadero.plantas_x_hilera }} plantas/hilera)
+            <ul class="planes-list">
+            {% for plan in invernadero.planes %}
+                {% set plan_idx = loop.index0 %}  <!-- Guardamos el índice del plan -->
+                <li>
+                    Plan: <strong>{{ plan.nombre }}</strong>
+                    <div class="acciones-plan">
+                        <a href="{{ url_for('simulate', inv_idx=inv_idx, plan_idx=plan_idx) }}">Simular</a>
+                        <a href="{{ url_for('graph', inv_idx=inv_idx, plan_idx=plan_idx) }}">Ver Estado de TDAs</a>
+                    </div>
+                </li>
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

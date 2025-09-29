@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Simulación - {{ invernadero.nombre }}{% endblock %}
+
+{% block content %}
+<h2> Resultados de Simulación</h2>
+<h3>Invernadero: {{ invernadero.nombre }}</h3>
+<h4>Plan: {{ plan.nombre }}</h4>
+
+<div class="stats">
+    <p><strong>Tiempo óptimo:</strong> {{ simulador.tiempo_total }} segundos</p>
+    <p><strong>Agua total:</strong> {{ simulador.estadisticas.agua_total }} litros</p>
+    <p><strong>Fertilizante total:</strong> {{ simulador.estadisticas.fertilizante_total }} gramos</p>
+</div>
+
+<h3>Estadísticas por dron:</h3>
+<table class="tabla-drones">
+    <thead>
+        <tr>
+            <th>Dron</th>
+            <th>Agua (L)</th>
+            <th>Fertilizante (g)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nombre, agua, fert in simulador.estadisticas.drones %}
+        <tr>
+            <td>{{ nombre }}</td>
+            <td>{{ agua }}</td>
+            <td>{{ fert }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Instrucciones por tiempo:</h3>
+<table class="tabla-instrucciones">
+    <thead>
+        <tr>
+            <th>Tiempo (s)</th>
+            {% for nombre, _, _ in simulador.estadisticas.drones %}
+                <th>{{ nombre }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for inst in simulador.instrucciones_por_tiempo %}
+        <tr>
+            <td>{{ inst.tiempo }}</td>
+            {% for nombre, _, _ in simulador.estadisticas.drones %}
+                <td>{{ inst.acciones.get(nombre, 'Esperar') }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3> Reporte HTML</h3>
+<p>Puedes ver o descargar el reporte completo:</p>
+<a href="{{ report_url }}" target="_blank" class="btn">Ver Reporte HTML</a>
+
+<h3> Estado de TDAs en un tiempo específico</h3>
+<form method="POST" action="{{ url_for('graph', inv_idx=inv_idx, plan_idx=plan_idx) }}">
+    <label for="t">Ingresa el tiempo (segundos):</label>
+    <input type="number" name="t" id="t" min="1" value="1" required>
+    <button type="submit">Ver Estado de TDAs</button>
+</form>
+{% endblock %}

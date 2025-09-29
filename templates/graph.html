@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Gráfico TDA - {{ invernadero.nombre }}{% endblock %}
+
+{% block content %}
+<h2> Estado de los TDAs en el tiempo {{ t }} segundos</h2>
+<h3>Invernadero: {{ invernadero.nombre }} | Plan: {{ plan.nombre }}</h3>
+
+<div class="grafico-tda">
+    {{ svg_grafico|safe }}
+</div>
+
+<h3>Cambiar tiempo:</h3>
+<form method="POST">
+    <label for="t">Nuevo tiempo (segundos):</label>
+    <input type="number" name="t" id="t" min="1" value="{{ t }}" required>
+    <button type="submit">Actualizar Gráfico</button>
+</form>
+
+<a href="{{ url_for('index') }}" class="btn">Volver al inicio</a>
+{% endblock %}

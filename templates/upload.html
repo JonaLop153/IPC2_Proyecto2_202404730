@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Cargar Configuración{% endblock %}
+
+{% block content %}
+<h2> Cargar Archivo de Configuración XML</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    <label for="file">Selecciona un archivo XML:</label><br><br>
+    <input type="file" name="file" id="file" accept=".xml" required>
+    <br><br>
+    <button type="submit">Cargar Archivo</button>
+</form>
+
+{% endblock %}
